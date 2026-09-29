@@ -1,0 +1,5 @@
+ 
+cloudflared config.yml'da 
+bu şekilde 
+  - hostname: countryincek.testprocess.com.tr
+    service: http://localhost:4211

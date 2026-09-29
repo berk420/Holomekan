@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  holomekan-app:
+    build: .
+    container_name: holomekan
+    ports:
+      - "4122:80" # Cloudflare panelinde 5000 portunu tanımladıysanız bu şekilde kalsın; 3000 tanımladıysanız "3000:80" yapın
+    restart: always

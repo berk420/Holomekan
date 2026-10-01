@@ -547,9 +547,6 @@
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <div class="hero-tag">
-          <i class="fa-solid fa-tree"></i> Kır Düğün & Etkinlik Mekanlarına Özel
-        </div>
         <h1 class="hero-title">Mekanınızın Doğal Güzelliğini 3D & AI Dokunuşuyla Canlandırın</h1>
         <p class="hero-description">
           Çiftler kır düğünü mekanınızı gezmeye gelmeden önce, hayallerindeki düğün gününü dijital ortamda yaşasın. Mekanınızı 3D turlarla sunun, yapay zeka ile mevsimsel kusurları silip hayalinizdeki düğün ortamına dönüştürün.
@@ -587,12 +584,12 @@
 
       <div class="ba-slider-container">
         <!-- SONRA / Yapay Zeka ile Canlandırılmış Düğün Anı Görseli -->
-        <div class="ba-img ba-before" style="background-image: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80');"></div>
-        <span class="ba-label ba-label-before">Yapay Zeka Canlandırması</span>
+        <div class="ba-img ba-before" style="background-image: url('after.png');"></div>
+        <span class="ba-label ba-label-before">Kusurlar Ai ile kapatıldı</span>
 
         <!-- ÖNCE / Ham Boş Mekan Görseli -->
-        <div class="ba-img ba-after" id="ba-after-img" style="background-image: url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80');"></div>
-        <span class="ba-label ba-label-after">Ham Çekim (Boş Mekan)</span>
+        <div class="ba-img ba-after" id="ba-after-img" style="background-image: url('before.png');"></div>
+        <span class="ba-label ba-label-after">Kusurlu fotoğraf</span>
 
         <input type="range" min="0" max="100" value="50" class="ba-slider" id="ba-range">
       </div>
@@ -659,30 +656,31 @@
       </div>
 
       <div class="contact-wrapper">
-        <form onsubmit="event.preventDefault(); alert('Talebiniz alındı! En kısa sürede iletişime geçeceğiz.');">
+        <form id="quote-request-form">
           <div class="form-group">
             <label>Adınız & Soyadınız</label>
-            <input type="text" class="form-control" placeholder="Ahmet Yılmaz" required>
+            <input type="text" class="form-control" name="full_name" placeholder="Ahmet Yılmaz" required>
           </div>
           <div class="form-group">
             <label>Mekan / Otel Adı</label>
-            <input type="text" class="form-control" placeholder="Yeşilvadi Kır Bahçesi" required>
+            <input type="text" class="form-control" name="venue_name" placeholder="Yeşilvadi Kır Bahçesi" required>
           </div>
           <div class="form-group">
             <label>E-posta Adresiniz</label>
-            <input type="email" class="form-control" placeholder="ahmet@mekan.com" required>
+            <input type="email" class="form-control" name="email" placeholder="ahmet@mekan.com" required>
           </div>
           <div class="form-group">
             <label>Telefon Numarası</label>
-            <input type="tel" class="form-control" placeholder="0555 000 00 00" required>
+            <input type="tel" class="form-control" name="phone" placeholder="0555 000 00 00" required>
           </div>
           <div class="form-group">
             <label>Notunuz (İsteğe Bağlı)</label>
-            <textarea class="form-control" rows="4" placeholder="Mekanımız hakkında detaylar veya sormak istedikleriniz..."></textarea>
+            <textarea class="form-control" name="note" rows="4" placeholder="Mekanımız hakkında detaylar veya sormak istedikleriniz..."></textarea>
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px;">
             <i class="fa-solid fa-paper-plane"></i> Teklif & Sunum Talebi Gönder
           </button>
+          <p id="quote-request-status" role="status" aria-live="polite" style="margin-top: 12px; text-align: center;"></p>
         </form>
       </div>
     </div>
@@ -732,6 +730,47 @@
         afterImg.style.width = `${val}%`;
       });
     }
+  </script>
+  <script>
+    const quoteRequestForm = document.getElementById('quote-request-form');
+    const quoteRequestStatus = document.getElementById('quote-request-status');
+
+    quoteRequestForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(quoteRequestForm);
+      const sqlValue = (field) => `'${String(formData.get(field) || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+      const sql = [
+        'CREATE TABLE IF NOT EXISTS teklif_talepleri (',
+        '  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,',
+        '  full_name VARCHAR(255) NOT NULL,',
+        '  venue_name VARCHAR(255) NOT NULL,',
+        '  email VARCHAR(255) NOT NULL,',
+        '  phone VARCHAR(50) NOT NULL,',
+        '  note TEXT NOT NULL,',
+        '  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        ') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;',
+        '',
+        'INSERT INTO teklif_talepleri (full_name, venue_name, email, phone, note) VALUES (',
+        `  ${sqlValue('full_name')},`,
+        `  ${sqlValue('venue_name')},`,
+        `  ${sqlValue('email')},`,
+        `  ${sqlValue('phone')},`,
+        `  ${sqlValue('note')}`,
+        ');',
+        ''
+      ].join('\n');
+
+      const downloadUrl = URL.createObjectURL(new Blob([sql], { type: 'application/sql;charset=utf-8' }));
+      const downloadLink = document.createElement('a');
+      downloadLink.href = downloadUrl;
+      downloadLink.download = `teklif-talebi-${new Date().toISOString().replace(/[:.]/g, '-')}.sql`;
+      downloadLink.click();
+      URL.revokeObjectURL(downloadUrl);
+
+      quoteRequestStatus.textContent = 'Talebiniz SQL dosyası olarak indirildi. Veritabanına aktarmak için dosyayı çalıştırın.';
+      quoteRequestForm.reset();
+    });
   </script>
 </body>
 </html>

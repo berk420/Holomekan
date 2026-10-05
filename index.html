@@ -289,10 +289,25 @@
     }
 
     .ba-after {
-      z-index: 2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
       width: 50%;
+      overflow: hidden;
+      z-index: 2;
       border-right: 3px solid #fff;
       box-shadow: 5px 0 15px rgba(0,0,0,0.15);
+    }
+
+    .ba-after-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      background-size: cover;
+      background-position: center;
     }
 
     .ba-slider {
@@ -755,7 +770,9 @@
         <span class="ba-label ba-label-before">Kusurlar Ai ile temizlendi</span>
 
         <!-- ÖNCE / Ham Boş Mekan Görseli -->
-        <div class="ba-img ba-after" id="ba-after-img" style="background-image: url('before.png');"></div>
+        <div class="ba-after" id="ba-after-img">
+          <div class="ba-after-image" style="background-image: url('before.png');"></div>
+        </div>
         <span class="ba-label ba-label-after">Kusurlu fotoğraf</span>
 
         <input type="range" min="0" max="100" value="50" class="ba-slider" id="ba-range">
@@ -873,12 +890,23 @@
   <script>
     const slider = document.getElementById('ba-range');
     const afterImg = document.getElementById('ba-after-img');
+    const afterImage = afterImg?.querySelector('.ba-after-image');
+    const sliderContainer = slider?.closest('.ba-slider-container');
 
-    if (slider && afterImg) {
+    if (slider && afterImg && afterImage && sliderContainer) {
+      const resizeAfterImage = () => {
+        afterImage.style.width = `${sliderContainer.clientWidth}px`;
+      };
+      const sliderResizeObserver = new ResizeObserver(resizeAfterImage);
+
       slider.addEventListener('input', (e) => {
         const val = e.target.value;
         afterImg.style.width = `${val}%`;
       });
+
+      resizeAfterImage();
+      sliderResizeObserver.observe(sliderContainer);
+      window.addEventListener('resize', resizeAfterImage);
     }
   </script>
   <script>

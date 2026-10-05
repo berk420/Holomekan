@@ -258,87 +258,40 @@
       font-size: 16px;
     }
 
-    /* Before / After Slider Section */
+    /* Before / After Comparison */
     .ba-section {
       background-color: #fff;
     }
 
-    .ba-slider-container {
-      position: relative;
+    .ba-comparison {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       max-width: 960px;
-      height: 520px;
+      gap: 24px;
       margin: 0 auto;
-      border-radius: 20px;
+    }
+
+    .ba-comparison-item {
+      position: relative;
+      aspect-ratio: 16 / 10;
       overflow: hidden;
+      border: 5px solid #fff;
+      border-radius: 16px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-      border: 8px solid #fff;
     }
 
-    .ba-img {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .ba-comparison-item img {
+      display: block;
       width: 100%;
       height: 100%;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .ba-before {
-      z-index: 1;
-    }
-
-    .ba-after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 50%;
-      overflow: hidden;
-      z-index: 2;
-      border-right: 3px solid #fff;
-      box-shadow: 5px 0 15px rgba(0,0,0,0.15);
-    }
-
-    .ba-after-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 50%;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .ba-slider {
-      position: absolute;
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      outline: none;
-      margin: 0;
-      z-index: 3;
-      cursor: ew-resize;
-    }
-
-    .ba-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--primary-green);
-      color: #fff;
-      cursor: pointer;
-      border: 3px solid #fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      object-fit: cover;
+      object-position: center;
     }
 
     .ba-label {
       position: absolute;
-      top: 24px;
+      top: 16px;
+      left: 16px;
       padding: 8px 18px;
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(4px);
@@ -346,11 +299,7 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--primary-green);
-      z-index: 2;
     }
-
-    .ba-label-before { right: 24px; }
-    .ba-label-after { left: 24px; }
 
     /* Features / Process */
     .process-grid {
@@ -639,20 +588,17 @@
         border-radius: 12px;
       }
 
-      .ba-slider-container {
-        height: 320px;
-        border-width: 5px;
-        border-radius: 14px;
+      .ba-comparison {
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
 
       .ba-label {
         top: 12px;
+        left: 12px;
         padding: 7px 10px;
         font-size: 11px;
       }
-
-      .ba-label-before { right: 12px; }
-      .ba-label-after { left: 12px; }
 
       .process-grid {
         gap: 16px;
@@ -758,24 +704,21 @@
     <div class="container">
       <div class="section-title-wrapper">
         <span class="section-subtitle">Yapay Zeka & Dijital Dokunuş</span>
-        <h2 class="section-title">Gündüz Sıradan Bir Bahçe, Gece Işıl Işıl Bir Düğün</h2>
+        <h2 class="section-title">Çekim esnasında istenmeyen tüm nesneleri kaldırıyoruz </h2>
         <p class="section-desc">
-          Mekanınızın boş ya da hazırlık aşamasındaki halini çekiyor, yapay zeka algoritmalarımızla tam bir kır düğünü konseptine kavuşturuyoruz. Kaydırıcıyı çekerek değişimi görün.
+          Mekanınızın boş ya da hazırlık aşamasındaki halini yapay zeka ile düğün konseptine kavuşturuyoruz.
         </p>
       </div>
 
-      <div class="ba-slider-container">
-        <!-- SONRA / Yapay Zeka ile Canlandırılmış Düğün Anı Görseli -->
-        <div class="ba-img ba-before" style="background-image: url('after.png');"></div>
-        <span class="ba-label ba-label-before">Kusurlar Ai ile temizlendi</span>
-
-        <!-- ÖNCE / Ham Boş Mekan Görseli -->
-        <div class="ba-after" id="ba-after-img">
-          <div class="ba-after-image" style="background-image: url('before.png');"></div>
+      <div class="ba-comparison">
+        <div class="ba-comparison-item">
+          <img src="before.png" alt="Yapay zeka düzenlemesi öncesi, kusurlu mekan fotoğrafı">
+          <span class="ba-label">ÖNCE · Kusurlu fotoğraf</span>
         </div>
-        <span class="ba-label ba-label-after">Kusurlu fotoğraf</span>
-
-        <input type="range" min="0" max="100" value="50" class="ba-slider" id="ba-range">
+        <div class="ba-comparison-item">
+          <img src="after.png" alt="Yapay zeka düzenlemesi sonrası, temizlenmiş mekan fotoğrafı">
+          <span class="ba-label">SONRA · AI ile temizlendi</span>
+        </div>
       </div>
     </div>
   </section>
@@ -886,29 +829,6 @@
     </div>
   </footer>
 
-  <!-- Script: Before / After Slider Logic -->
-  <script>
-    const slider = document.getElementById('ba-range');
-    const afterImg = document.getElementById('ba-after-img');
-    const afterImage = afterImg?.querySelector('.ba-after-image');
-    const sliderContainer = slider?.closest('.ba-slider-container');
-
-    if (slider && afterImg && afterImage && sliderContainer) {
-      const resizeAfterImage = () => {
-        afterImage.style.width = `${sliderContainer.clientWidth}px`;
-      };
-      const sliderResizeObserver = new ResizeObserver(resizeAfterImage);
-
-      slider.addEventListener('input', (e) => {
-        const val = e.target.value;
-        afterImg.style.width = `${val}%`;
-      });
-
-      resizeAfterImage();
-      sliderResizeObserver.observe(sliderContainer);
-      window.addEventListener('resize', resizeAfterImage);
-    }
-  </script>
   <script>
     const quoteRequestForm = document.getElementById('quote-request-form');
     const quoteRequestStatus = document.getElementById('quote-request-status');

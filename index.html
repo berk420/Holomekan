@@ -512,6 +512,10 @@
       font-size: 13px;
     }
 
+    .nav-cta-mobile {
+      display: none;
+    }
+
     /* Responsive Design */
     @media (max-width: 992px) {
       .hero-grid { grid-template-columns: 1fr; }
@@ -519,6 +523,147 @@
       .footer-grid { grid-template-columns: 1fr; }
       .hero-title { font-size: 36px; }
       nav ul { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 18px;
+      }
+
+      .nav-wrapper {
+        height: 68px;
+        gap: 8px;
+      }
+
+      .logo {
+        gap: 7px;
+        font-size: 19px;
+      }
+
+      .logo-icon {
+        width: 34px;
+        height: 34px;
+      }
+
+      .nav-wrapper > .btn {
+        padding: 10px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .nav-cta-desktop {
+        display: none;
+      }
+
+      .nav-cta-mobile {
+        display: inline;
+      }
+
+      .hero {
+        padding: 48px 0 36px;
+      }
+
+      .hero-grid {
+        gap: 30px;
+      }
+
+      .hero-title {
+        font-size: clamp(32px, 9vw, 40px);
+      }
+
+      .hero-description {
+        font-size: 16px;
+        margin-bottom: 24px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .hero-actions .btn {
+        justify-content: center;
+      }
+
+      .hero-image-card img {
+        height: 320px;
+      }
+
+      .hero-badge {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        padding: 12px;
+        gap: 10px;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      .section-title-wrapper {
+        margin-bottom: 36px;
+      }
+
+      .section-title {
+        font-size: 29px;
+      }
+
+      .showcase-3d {
+        padding: 36px 18px;
+        border-radius: 18px;
+      }
+
+      .showcase-3d .section-title {
+        font-size: 28px;
+      }
+
+      .mockup-frame {
+        height: 260px;
+        margin-top: 24px;
+        border-radius: 12px;
+      }
+
+      .ba-slider-container {
+        height: 320px;
+        border-width: 5px;
+        border-radius: 14px;
+      }
+
+      .ba-label {
+        top: 12px;
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+
+      .ba-label-before { right: 12px; }
+      .ba-label-after { left: 12px; }
+
+      .process-grid {
+        gap: 16px;
+      }
+
+      .process-card {
+        padding: 24px 20px;
+      }
+
+      .contact-wrapper {
+        padding: 24px 18px;
+        border-radius: 16px;
+      }
+
+      .form-control {
+        font-size: 16px;
+      }
+
+      footer {
+        padding: 44px 0 24px;
+      }
+
+      .footer-grid {
+        gap: 28px;
+        margin-bottom: 28px;
+      }
     }
   </style>
 </head>
@@ -539,7 +684,7 @@
           <li><a href="#iletisim">İletişim</a></li>
         </ul>
       </nav>
-      <a href="#iletisim" class="btn btn-primary">Mekanınız İçin Teklif Alın</a>
+      <a href="#iletisim" class="btn btn-primary"><span class="nav-cta-desktop">Mekanınız İçin Teklif Alın</span><span class="nav-cta-mobile">Teklif Alın</span></a>
     </div>
   </header>
 
